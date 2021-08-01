@@ -32,7 +32,12 @@ func TestSelfSign(t *testing.T) {
 
 func TestTlsDial(t *testing.T) {
 
-	p, _ := ioutil.ReadFile("cert.pem")
+	// certification self signed,
+	// so you need to add server certification at CA
+	p, err := ioutil.ReadFile("cert.pem")
+	if err != nil {
+		t.Fatal(err.Error())
+	}
 
 	pool := x509.NewCertPool()
 	pool.AppendCertsFromPEM(p)

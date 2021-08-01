@@ -16,13 +16,18 @@ func main() {
 	config := tls.Config{Certificates: []tls.Certificate{cert}}
 
 	config.MinVersion = tls.VersionTLS13
-	config.CipherSuites = []uint16{tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256}
+	config.CipherSuites = []uint16{
+		tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+		tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+	}
+
 	config.Rand = rand.Reader
 	service := "localhost:41111"
 	listener, err := tls.Listen("tcp", service, &config)
 	if err != nil {
 		log.Fatalf("server: listen: %s", err)
 	}
+	defer listener.Close()
 	log.Print("server: listening")
 
 	conn, err := listener.Accept()
